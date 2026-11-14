@@ -1,0 +1,14 @@
+{
+  "name": "sad-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QualMoto? SAD - Sistema de Apoio à Decisão para Escolha de Motocicletas",
+  "scripts": {
+    "start:backend": "npm --prefix backend run start:dev",
+    "start:frontend": "npm --prefix frontend run dev",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run build:backend && npm run build:frontend"
+  }
+}
+
