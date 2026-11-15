@@ -365,7 +365,7 @@ export function simulateDecisionSync(
     regressionAnalysis,
     decisionSummary: {
       headline: `Grupo recomendado: ${recommended.name}`,
-      justification: `Melhor custo-benefício para rodagem estimada de ${profile.monthlyKm.toLocaleString('pt-BR')} km/mês (${Math.round(profile.cityRatio * 100)}% urbano) dentro do orçamento de R$ ${profile.budgetLimitMonthly.toLocaleString('pt-BR')}/mês, priorizando consumo reduzido e manutenção mais acessível.`,
+      justification: `Maior aderência estratégica para rodagem estimada de ${profile.monthlyKm.toLocaleString('pt-BR')} km/mês (${Math.round(profile.cityRatio * 100)}% urbano) dentro do orçamento de R$ ${profile.budgetLimitMonthly.toLocaleString('pt-BR')}/mês, priorizando ${recommended.tagline.toLowerCase()}.`,
       budgetComplianceRate: Math.round((withinBudget / topsisItems.length) * 100),
       bestCostPerKm: Number(Math.min(...topsisItems.map(i => i.tco.costPerKm)).toFixed(2)),
       bestFuelEconomyKml: Math.max(...topsisItems.map(i => i.vehicle.cityKml))

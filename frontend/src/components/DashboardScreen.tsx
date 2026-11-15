@@ -148,7 +148,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
           <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
-            Menor Custo por Km
+            Menor Custo / Km (Mercado)
           </span>
           <div className="mt-2 flex items-baseline justify-between">
             <span className="text-xl font-bold text-slate-900">
@@ -159,7 +159,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
             </span>
           </div>
           <span className="text-[11px] text-slate-500 mt-1 block">
-            Considerando combustível, relação, óleo e pneus
+            Melhor marca entre os 201 modelos avaliados
           </span>
         </div>
 
@@ -176,13 +176,13 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
             </span>
           </div>
           <span className="text-[11px] text-slate-500 mt-1 block">
-            Das opções cabem no limite mensal
+            Das 201 motos da base cabem no seu limite
           </span>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
           <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
-            Melhor Consumo Urbano
+            Melhor Consumo Urbano (Mercado)
           </span>
           <div className="mt-2 flex items-baseline justify-between">
             <span className="text-xl font-bold text-slate-900">
@@ -193,7 +193,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
             </span>
           </div>
           <span className="text-[11px] text-slate-500 mt-1 block">
-            Maior economia em ciclo urbano homologado
+            Recorde de economia homologado no catálogo
           </span>
         </div>
       </div>

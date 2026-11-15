@@ -250,9 +250,9 @@ export class ClusteringService {
     const bestCostPerKm = Math.min(...topsisItems.map(i => i.tco.costPerKm));
     const bestFuelEconomyKml = Math.max(...topsisItems.map(i => i.vehicle.cityKml));
 
-    // Justificativa objetiva e direta
+    // Justificativa objetiva e direta alinhada ao grupo vencedor
     let headline = `Grupo recomendado: ${recommended.name}`;
-    let justification = `Melhor custo-benefício para rodagem estimada de ${profile.monthlyKm.toLocaleString('pt-BR')} km/mês (${Math.round(profile.cityRatio * 100)}% urbano) dentro do orçamento de R$ ${profile.budgetLimitMonthly.toLocaleString('pt-BR')}/mês, priorizando consumo reduzido e manutenção mais acessível.`;
+    let justification = `Maior aderência estratégica para rodagem estimada de ${profile.monthlyKm.toLocaleString('pt-BR')} km/mês (${Math.round(profile.cityRatio * 100)}% urbano) dentro do orçamento de R$ ${profile.budgetLimitMonthly.toLocaleString('pt-BR')}/mês, priorizando ${recommended.tagline.toLowerCase()}.`;
 
     return {
       clusters,
