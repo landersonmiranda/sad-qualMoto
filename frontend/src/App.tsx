@@ -21,7 +21,7 @@ import { VehiclesScreen } from './components/VehiclesScreen';
 
 export function App() {
   const [activeScreen, setActiveScreen] = useState<ActiveScreen>('login');
-  const [userEmail, setUserEmail] = useState('test@qualmoto.com.br');
+  const [userEmail, setUserEmail] = useState('sadmoto@qualmoto.com.br');
 
   // Estado dinâmico da base de veículos (persistido em localStorage)
   const [vehicles, setVehicles] = useState<Vehicle[]>(() => {

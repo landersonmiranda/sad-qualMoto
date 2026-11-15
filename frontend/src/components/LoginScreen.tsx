@@ -12,11 +12,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanUser = username.trim();
+    const cleanUser = username.trim().toLowerCase();
 
-    if (cleanUser === 'test' && password === 'test123') {
+    if ((cleanUser === 'sadmoto' || cleanUser === 'sadmoto@qualmoto.com.br') && password === 'sadmoto123') {
       setError(null);
-      onLogin('test@qualmoto.com.br');
+      onLogin('sadmoto@qualmoto.com.br');
     } else {
       setError('Usuário ou senha inválidos.');
     }
