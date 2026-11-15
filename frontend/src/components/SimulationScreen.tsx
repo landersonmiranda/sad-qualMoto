@@ -81,13 +81,22 @@ export const SimulationScreen: React.FC<SimulationScreenProps> = ({
   const winner = recommendedGroup?.vehicles[0];
   const runnerUp = runnerUpGroup?.vehicles[0] || recommendedGroup?.vehicles[1];
 
+  // Converte TCO mensal em nota de 1 a 5 (menor custo = maior nota de economia no radar)
+  const calcEconomyRadarScore = (item?: any) => {
+    if (!item?.tco?.totalMonthlyTCO) return 3.5;
+    const tco = item.tco.totalMonthlyTCO;
+    // TCO <= 450 R$/mês recebe nota 5.0; TCO >= 2200 R$/mês recebe 1.0
+    const score = 5 - ((tco - 450) / (2200 - 450)) * 4;
+    return Number(Math.max(1, Math.min(5, score)).toFixed(1));
+  };
+
   // Dados do Radar Multicritério com cores limpas
   const radarData = [
     {
       subject: 'Economia (TCO)',
       fullMark: 5,
-      Vencedor: winner ? Math.round(winner.normalizedScores.economy * 5) : 3,
-      Segundo: runnerUp ? Math.round(runnerUp.normalizedScores.economy * 5) : 3,
+      Vencedor: calcEconomyRadarScore(winner),
+      Segundo: calcEconomyRadarScore(runnerUp),
     },
     {
       subject: 'Conforto / Suspensão',
