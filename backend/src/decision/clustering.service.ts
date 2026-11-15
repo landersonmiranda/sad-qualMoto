@@ -163,17 +163,26 @@ export class ClusteringService {
         let fit = avgCi * 100;
         // Bonificação se TCO do grupo respeita o limite de orçamento
         if (avgTCO <= profile.budgetLimitMonthly) {
-          fit += 10;
+          fit += 6;
         } else {
           fit -= Math.min(25, ((avgTCO - profile.budgetLimitMonthly) / profile.budgetLimitMonthly) * 20);
         }
 
-        // Bonificação por alinhamento de perfil de uso
-        if (clusterId === 'rugged_utility' && weights.comfort >= 25) fit += 8;
-        if (clusterId === 'efficiency_kings' && (weights.economy >= 30 || profile.monthlyKm >= 1500)) fit += 8;
-        if (clusterId === 'performance_highway' && (profile.cityRatio <= 0.6 || weights.performance >= 25)) fit += 8;
-        if (clusterId === 'resale_liquidity' && weights.resale >= 20) fit += 8;
-        if (clusterId === 'urban_comfort' && profile.cityRatio >= 0.85 && weights.comfort >= 20) fit += 8;
+        // Alinhamento dinâmico proporcional aos sliders de preferência
+        if (clusterId === 'efficiency_kings') {
+          fit += (weights.economy - 20) * 0.45;
+          if (profile.monthlyKm >= 2000 && weights.economy >= 25) fit += 5;
+        } else if (clusterId === 'rugged_utility') {
+          fit += (weights.comfort - 20) * 0.55;
+          if (profile.cityRatio <= 0.7) fit += 4;
+        } else if (clusterId === 'performance_highway') {
+          fit += (weights.performance - 15) * 0.6;
+          if (profile.cityRatio <= 0.6) fit += 5;
+        } else if (clusterId === 'resale_liquidity') {
+          fit += (weights.resale - 15) * 0.55;
+        } else if (clusterId === 'urban_comfort') {
+          fit += (weights.comfort - 20) * 0.4 + (profile.cityRatio >= 0.75 ? 5 : -3);
+        }
 
         clusters.push({
           id: clusterId,

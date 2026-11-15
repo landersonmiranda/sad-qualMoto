@@ -199,14 +199,27 @@ export function simulateDecisionSync(
       const avgCi = groupVehicles.reduce((s, i) => s + i.closenessScore, 0) / groupVehicles.length;
 
       let fit = avgCi * 100;
-      if (avgTCO <= profile.budgetLimitMonthly) fit += 10;
-      else fit -= Math.min(25, ((avgTCO - profile.budgetLimitMonthly) / profile.budgetLimitMonthly) * 20);
+      if (avgTCO <= profile.budgetLimitMonthly) {
+        fit += 6;
+      } else {
+        fit -= Math.min(25, ((avgTCO - profile.budgetLimitMonthly) / profile.budgetLimitMonthly) * 20);
+      }
 
-      if (id === 'rugged_utility' && weights.comfort >= 25) fit += 8;
-      if (id === 'efficiency_kings' && (weights.economy >= 30 || profile.monthlyKm >= 1500)) fit += 8;
-      if (id === 'performance_highway' && (profile.cityRatio <= 0.6 || weights.performance >= 25)) fit += 8;
-      if (id === 'resale_liquidity' && weights.resale >= 20) fit += 8;
-      if (id === 'urban_comfort' && profile.cityRatio >= 0.85 && weights.comfort >= 20) fit += 8;
+      // Alinhamento dinâmico proporcional aos sliders de preferência
+      if (id === 'efficiency_kings') {
+        fit += (weights.economy - 20) * 0.45;
+        if (profile.monthlyKm >= 2000 && weights.economy >= 25) fit += 5;
+      } else if (id === 'rugged_utility') {
+        fit += (weights.comfort - 20) * 0.55;
+        if (profile.cityRatio <= 0.7) fit += 4;
+      } else if (id === 'performance_highway') {
+        fit += (weights.performance - 15) * 0.6;
+        if (profile.cityRatio <= 0.6) fit += 5;
+      } else if (id === 'resale_liquidity') {
+        fit += (weights.resale - 15) * 0.55;
+      } else if (id === 'urban_comfort') {
+        fit += (weights.comfort - 20) * 0.4 + (profile.cityRatio >= 0.75 ? 5 : -3);
+      }
 
       clusters.push({
         id,
