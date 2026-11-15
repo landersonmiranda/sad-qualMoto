@@ -279,20 +279,26 @@ export function simulateDecisionSync(
   let optYear = 3;
   let foundCross = false;
 
-  // Fatores de ciclo de vida de motocicletas (progressão técnica e empírica):
-  // Anos 1 e 2: garantia de fábrica e revisões programadas
-  // Anos 3 e 4: troca de desgaste (relação, pneus, bateria) -> Ponto de inflexão
-  // Ano 5+: desgaste severo e corretivas
-  const lifecycleAgingFactors = [0.55, 0.80, 1.25, 1.70, 2.25];
+  // Ponderadores de desvalorização anual real (maior impacto ao sair da concessionária no Ano 1)
+  const annualDepreciationWeights = [2.2, 1.4, 1.0, 0.75, 0.60];
+
+  // Fatores de envelhecimento mecânico:
+  // Ano 1 (garantia total de fábrica de 3 anos, mão de obra grátis nas primeiras revisões): 0.30x
+  // Ano 2 (garantia ativa, 1º kit relação e pneus): 0.65x
+  // Ano 3 (fim de garantia, peças pesadas de desgaste, bateria, velas): 1.10x
+  // Ano 4 (pós-garantia, preventiva geral): 1.55x
+  // Ano 5+ (risco corretivo severo): 2.05x
+  const lifecycleAgingFactors = [0.30, 0.65, 1.10, 1.55, 2.05];
 
   for (let t = 1; t <= 5; t++) {
     const accKm = annualKm * t;
-    const resVal = Math.round(initialPrice * Math.pow(1 - depRate, t));
+    const yearDepRate = Math.min(0.25, depRate * (annualDepreciationWeights[t - 1] || 0.7));
+    const resVal = Math.round(prevVal * (1 - yearDepRate));
     const annDepLoss = prevVal - resVal;
     prevVal = resVal;
 
     const aging = lifecycleAgingFactors[t - 1] || (1 + (t - 1) * 0.25);
-    const annMaint = Math.round(annualKm * (repVehicle ? repVehicle.maintenancePerKm : 0.12) * aging);
+    const annMaint = Math.round(annualKm * (repVehicle ? repVehicle.maintenancePerKm : 0.10) * aging);
     const annTCO = Math.round(annFuel + annFixed + annMaint + annDepLoss);
     const costKm = Number((annTCO / annualKm).toFixed(2));
 

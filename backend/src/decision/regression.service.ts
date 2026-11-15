@@ -50,19 +50,22 @@ export class RegressionService {
     let optimalYear = 3;
     let foundCrossover = false;
 
-    // Fatores de ciclo de vida de motocicletas (progressão técnica e empírica):
-    // Ano 1 (garantia total de fábrica): 0.55x do custo base (apenas revisões programadas de óleo e filtro)
-    // Ano 2 (garantia): 0.80x do custo base (revisões intermediárias, pastilhas e fluidos)
-    // Ano 3 (fim de garantia): 1.25x do custo base (1ª troca de kit relação, pneus, velas, bateria) -> Ponto de inflexão
-    // Ano 4 (pós-garantia): 1.70x do custo base (segundo par de pneus, cabos, buchas, preventiva completa)
-    // Ano 5+ (risco corretivo): 2.25x do custo base (embreagem, estator, amortecedores, rolamentos)
-    const lifecycleAgingFactors = [0.55, 0.80, 1.25, 1.70, 2.25];
+    // Ponderadores de desvalorização anual real (maior impacto ao sair da concessionária no Ano 1)
+    const annualDepreciationWeights = [2.2, 1.4, 1.0, 0.75, 0.60];
+
+    // Fatores de envelhecimento mecânico:
+    // Ano 1 (garantia total de fábrica de 3 anos, mão de obra grátis nas primeiras revisões): 0.30x
+    // Ano 2 (garantia ativa, 1º kit relação e pneus): 0.65x
+    // Ano 3 (fim de garantia, peças pesadas de desgaste, bateria, velas): 1.10x
+    // Ano 4 (pós-garantia, preventiva geral): 1.55x
+    // Ano 5+ (risco corretivo severo): 2.05x
+    const lifecycleAgingFactors = [0.30, 0.65, 1.10, 1.55, 2.05];
 
     for (let t = 1; t <= 5; t++) {
       const accumulatedKm = annualKm * t;
 
-      // Regressão Exponencial de Depreciação FIPE: V(t) = V0 * (1 - dep)^t
-      const residualFipeValue = Math.round(initialPrice * Math.pow(1 - depRate, t));
+      const yearDepRate = Math.min(0.25, depRate * (annualDepreciationWeights[t - 1] || 0.7));
+      const residualFipeValue = Math.round(prevValue * (1 - yearDepRate));
       const annualDepreciationLoss = prevValue - residualFipeValue;
       prevValue = residualFipeValue;
 
